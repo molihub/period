@@ -55,28 +55,50 @@
 		<span id="time">-</span>
 	</div>
 
+	<p></p>
+	<p></p>
+
+	<div>
+		<button onclick="javascript: testOnce();">
+			<span>先试一试</span>
+		</button>
+	</div>
+
 	<script>
 		var theTimer = null;
 		var times = 0;
-		function alarm()
+
+		function testOnce()
 		{
 			document.getElementById("audio").play();
-			times++;
+		}
 
+		function alarm(timeout)
+		{
+			document.getElementById("audio").play();
+
+			times++;
 			document.getElementById("times").innerText = times;
+
+			refreshNextInfo(timeout);
 		}
 
 		function refreshTimers(period)
 		{
 			if(theTimer !== null)
 			{
-				window.clearTimeout(theTimer);
+				window.clearInterval(theTimer);
 			}
 
-			theTimer = window.setTimeout(alarm, period * 60 * 1000);
+			var timeout = period * 60 * 1000;
+			theTimer = window.setInterval(alarm, timeout, timeout);
 
-			var next = new Date(new Date().getTime() + period * 60 * 1000);
-			
+			refreshNextInfo(timeout);
+		}
+
+		function refreshNextInfo(timeout)
+		{
+			var next = new Date(new Date().getTime() + timeout);
 			document.getElementById("time").innerText = next.toLocaleTimeString();
 		}
 
