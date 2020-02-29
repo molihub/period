@@ -1,0 +1,75 @@
+﻿<html>
+<head>
+	<title>简易定时器开箱即用</title>
+
+	<style>
+	body,select,span {
+		font-size: 100px;
+		font-weight: 900;
+	}
+	option {
+		font-size: 30px;
+		font-weight: 900;
+	}
+	</style>
+</head>
+
+<body>
+	<div>
+		<span>每</span>
+		<select id="period" onchange="javascript: changePeriod();">
+			<option value="10">10</option>
+			<option value="20">20</option>
+			<option value="30">30</option>
+			<option value="40">40</option>
+			<option value="50">50</option>
+			<option value="60">60</option>
+		</select>
+		<span>分钟</span>
+	</div>
+	
+	<audio id="audio" controls>
+		<source src="./horse.mp3" type="audio/mpeg">
+		您的浏览器不支持本应用的声音播放技术(audio)。
+	</audio>
+
+	<script>
+		var theTimer = null;
+		function alarm()
+		{
+			document.getElementById("audio").play();
+		}
+
+		function refreshTimers(period)
+		{
+			if(theTimer !== null)
+			{
+				window.clearTimeout(theTimer);
+			}
+
+			theTimer = window.setTimeout(alarm, period * 60 * 1000)
+		}
+
+		function changePeriod()
+		{
+			var period = document.getElementById("period").value;
+			localStorage.setItem("period", period);
+			refreshTimers(period);
+		}
+	
+		function reload()
+		{
+			var select = document.getElementById("period");
+			var saved = localStorage.getItem("period");
+			if(saved)
+			{
+				document.getElementById("period").value = saved;
+			}
+
+			changePeriod(document.getElementById("period").value);
+		}
+
+		reload();
+	</script>
+</body>
+</html>
