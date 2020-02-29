@@ -1,6 +1,9 @@
-﻿<html>
+﻿<!doctype html>
+<html>
 <head>
+	<meta charset="utf-8">
 	<title>简易定时器开箱即用</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<style>
 	body,select,span {
@@ -10,6 +13,13 @@
 	option {
 		font-size: 30px;
 		font-weight: 900;
+	}
+	select {
+		color: blue;
+	}
+
+	#times,	#time {
+		color: blueviolet;
 	}
 	</style>
 </head>
@@ -37,11 +47,25 @@
 		您的浏览器不支持本应用的声音播放技术(audio)。
 	</audio>
 
+	<div>
+		<span>已经提醒</span>
+		<span id="times">-</span>
+		<span>次</span>
+	</div>
+	<div>
+		<span>预计下次</span>
+		<span id="time">-</span>
+	</div>
+
 	<script>
 		var theTimer = null;
+		var times = 0;
 		function alarm()
 		{
 			document.getElementById("audio").play();
+			times++;
+
+			document.getElementById("times").innerText = times;
 		}
 
 		function refreshTimers(period)
@@ -51,7 +75,11 @@
 				window.clearTimeout(theTimer);
 			}
 
-			theTimer = window.setTimeout(alarm, period * 60 * 1000)
+			theTimer = window.setTimeout(alarm, period * 60 * 1000);
+
+			var next = new Date(new Date().getTime() + period * 60 * 1000);
+			
+			document.getElementById("time").innerText = next.toLocaleTimeString();
 		}
 
 		function changePeriod()
